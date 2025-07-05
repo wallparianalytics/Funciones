@@ -13,11 +13,11 @@
   <div class="nav-wrapper container">
     <a href="#!" class="brand-logo">Llamadas</a>
     <ul id="nav-mobile" class="right">
-      <li><a href="#!" id="welcome"></a></li>
+      <li><a href="#!" id="welcome" class="white-text"></a></li>
     </ul>
   </div>
 </nav>
-<div class="container" style="margin-top:20px;">
+<div class="container" style="margin-top:30px;">
   <div class="row">
     <div class="col s12">
       <ul class="tabs">
@@ -44,6 +44,7 @@
 <script>
   document.addEventListener('DOMContentLoaded', function(){
     M.Tabs.init(document.querySelectorAll('.tabs'));
+    M.AutoInit();
     const name = "<?!= fullName ?>";
     document.getElementById('welcome').textContent = 'Bienvenido/a, ' + name;
     const modal = document.getElementById('welcomeModal');

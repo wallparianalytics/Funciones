@@ -47,7 +47,11 @@ function saveCall(callData) {
     }
     if (rowIndex === -1) return {error: 'NOT_FOUND'};
     const now = new Date();
-    sheet.getRange(rowIndex, headers.length + 1, 1, 4).setValues([[now, callData.estado, callData.participa, callData.obs]]);
+    const estado = Utilities.formatString('%s', callData.estado).trim();
+    const participa = Utilities.formatString('%s', callData.participa).trim();
+    const obs = Utilities.formatString('%s', callData.obs).trim();
+    sheet.getRange(rowIndex, headers.length + 1, 1, 4)
+      .setValues([[now, estado, participa, obs]]);
     return {success: true};
   } finally {
     lock.releaseLock();

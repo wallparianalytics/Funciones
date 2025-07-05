@@ -8,6 +8,8 @@
  * @return {Object}
  */
 function login(form) {
+  const email = Utilities.formatString('%s', form.email).trim();
+  const dni = Utilities.formatString('%s', form.dni).trim();
   const ss = getSpreadsheet(ROLES_SS_ID);
   const sheet = ss.getSheetByName(ROLES_SHEET);
   const data = sheet.getDataRange().getValues();
@@ -17,7 +19,7 @@ function login(form) {
   let result = null;
   for (let i = 0; i < data.length; i++) {
     const row = data[i];
-    if (row[idxEmail] === form.email && String(row[idxDni]) === form.dni) {
+    if (row[idxEmail] === email && String(row[idxDni]) === dni) {
       result = row;
       break;
     }
@@ -25,10 +27,10 @@ function login(form) {
   const logSheet = ss.getSheetByName(LOGS_SHEET);
   const ts = new Date();
   if (!result) {
-    logSheet.appendRow([ts, form.email, form.dni, 'FALLO']);
+    logSheet.appendRow([ts, email, dni, 'FALLO']);
     return {success: false};
   }
-  logSheet.appendRow([ts, form.email, form.dni, 'EXITO']);
+  logSheet.appendRow([ts, email, dni, 'EXITO']);
   return {
     success: true,
     role: result[headers.indexOf('Rol')],

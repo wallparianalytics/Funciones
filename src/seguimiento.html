@@ -18,6 +18,42 @@
   </thead>
   <tbody></tbody>
 </table>
+<div class="fixed-action-btn">
+  <a class="btn-floating btn-large blue" id="openPanel">
+    <i class="large material-icons">add</i>
+  </a>
+</div>
+
+<div id="callPanel" class="sidenav">
+  <div class="container" style="margin-top:20px;">
+    <h5>Registrar llamada</h5>
+    <form id="callForm">
+      <div class="input-field">
+        <input id="dniCase" type="text" readonly>
+        <label for="dniCase">DNI</label>
+      </div>
+      <p>
+        <label>
+          <input name="estado" type="radio" value="SI" checked>
+          <span>Contestó</span>
+        </label>
+      </p>
+      <p>
+        <label>
+          <input name="estado" type="radio" value="NO">
+          <span>No contestó</span>
+        </label>
+      </p>
+      <div class="input-field">
+        <textarea id="obs" class="materialize-textarea"></textarea>
+        <label for="obs">Observaciones</label>
+      </div>
+      <div class="right-align">
+        <button class="btn" type="submit">Guardar</button>
+      </div>
+    </form>
+  </div>
+</div>
 <script>
 function loadCases(){
   google.script.run.withSuccessHandler(renderCases).getCases('<?!= idMonitor ?>');
@@ -27,9 +63,29 @@ function renderCases(rows){
   tbody.innerHTML = '';
   rows.forEach(r => {
     const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${r.dni}</td><td>${r.nombres}</td><td>${r.Monitor}</td><td><label><input type="checkbox" disabled /><span></span></label></td>`;
+    tr.innerHTML = `<td>${r.dni}</td><td>${r.nombres}</td><td>${r.Monitor}</td><td><a href="#!" class="btn-small call-btn" data-dni="${r.dni}">Registrar</a></td>`;
     tbody.appendChild(tr);
   });
+  document.querySelectorAll('.call-btn').forEach(btn => btn.addEventListener('click', openPanel));
 }
+function openPanel(e){
+  const dni = e.currentTarget.getAttribute('data-dni');
+  document.getElementById('dniCase').value = dni;
+  M.updateTextFields();
+  const panel = M.Sidenav.getInstance(document.getElementById('callPanel'));
+  panel.open();
+}
+document.getElementById('callForm').addEventListener('submit', function(ev){
+  ev.preventDefault();
+  const data = {
+    dni: document.getElementById('dniCase').value,
+    estado: document.querySelector('input[name="estado"]:checked').value,
+    obs: document.getElementById('obs').value,
+    participa: ''
+  };
+  google.script.run.saveCall(data);
+  M.Sidenav.getInstance(document.getElementById('callPanel')).close();
+});
+document.getElementById('openPanel').addEventListener('click', openPanel);
 loadCases();
 </script>
