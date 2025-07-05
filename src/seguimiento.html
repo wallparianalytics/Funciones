@@ -1,0 +1,35 @@
+<div id="welcomeModal" class="modal">
+  <div class="modal-content">
+    <h5>Bienvenido/a</h5>
+    <p><?!= fullName ?></p>
+  </div>
+  <div class="modal-footer">
+    <a href="#!" class="modal-close btn-flat">Cerrar</a>
+  </div>
+</div>
+<table class="highlight" id="casesTable">
+  <thead>
+    <tr>
+      <th>DNI</th>
+      <th>Nombres</th>
+      <th>Monitor</th>
+      <th>Llamadas</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+<script>
+function loadCases(){
+  google.script.run.withSuccessHandler(renderCases).getCases('<?!= idMonitor ?>');
+}
+function renderCases(rows){
+  const tbody = document.querySelector('#casesTable tbody');
+  tbody.innerHTML = '';
+  rows.forEach(r => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${r.dni}</td><td>${r.nombres}</td><td>${r.Monitor}</td><td><label><input type="checkbox" disabled /><span></span></label></td>`;
+    tbody.appendChild(tr);
+  });
+}
+loadCases();
+</script>
