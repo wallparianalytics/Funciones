@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <?!= include('css'); ?>
+</head>
+<body class="blue-grey lighten-5">
+  <div class="container" style="max-width:420px;margin-top:100px;">
+    <div class="row">
+      <form class="col s12" id="loginForm">
+        <div class="card-panel z-depth-2">
+          <h5 class="center-align">Inicio de Sesión</h5>
+          <div class="input-field">
+            <input id="email" type="email" name="email" required>
+            <label for="email">Correo</label>
+          </div>
+          <div class="input-field">
+            <input id="dni" type="text" name="dni" required>
+            <label for="dni">DNI</label>
+          </div>
+          <div class="center-align">
+            <button class="btn waves-effect blue" type="submit">Ingresar</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', function(e){
+      e.preventDefault();
+      const form = {
+        email: document.getElementById('email').value,
+        dni: document.getElementById('dni').value
+      };
+      google.script.run.withSuccessHandler(handleLogin).login(form);
+    });
+    function handleLogin(res){
+      if(!res.success){
+        M.toast({html:'Matrícula incorrecta', classes:'red'});
+        return;
+      }
+      google.script.run.withSuccessHandler(function(html){
+        document.open();
+        document.write(html);
+        document.close();
+      }).showMain(res.role, res.idMonitor, res.fullName);
+    }
+    document.addEventListener('DOMContentLoaded', function(){
+      M.AutoInit();
+    });
+  </script>
+</body>
+</html>
