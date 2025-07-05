@@ -1,0 +1,20 @@
+<div class="row">
+  <div class="col s12 m4">
+    <div class="card blue lighten-1 white-text">
+      <div class="card-content">
+        <span class="card-title">Total llamadas</span>
+        <p id="kpi-total">0</p>
+      </div>
+    </div>
+  </div>
+  <div class="col s12 m8">
+    <canvas id="chart1"></canvas>
+  </div>
+</div>
+<script>
+function loadStats(){
+  // Placeholder de carga de datos
+  document.getElementById('kpi-total').textContent = '0';
+}
+loadStats();
+</script>
